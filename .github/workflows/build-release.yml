@@ -2,9 +2,10 @@ name: Build Release
 
 on:
     push:
+        branches:
+            - main
         tags:
             - 'v*'
-
 jobs:
     build:
         runs-on: ubuntu-latest
@@ -31,6 +32,9 @@ jobs:
 
             - name: Install Android SDK
               uses: android-actions/setup-android@v3
+
+            - name: Create local.properties
+              run: echo "sdk.dir=$ANDROID_HOME" > local.properties
 
             - name: Install NDK 21.4.7075529
               run: sdkmanager "ndk;21.4.7075529"
