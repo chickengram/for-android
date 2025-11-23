@@ -35,6 +35,13 @@ jobs:
             - name: Install NDK 21.4.7075529
               run: sdkmanager "ndk;21.4.7075529"
 
+            - name: Free disk space
+              run: |
+                  sudo rm -rf /usr/share/dotnet
+                  sudo rm -rf /usr/local/lib/android
+                  sudo rm -rf /opt/ghc
+                  sudo docker system prune -af
+
             - name: Make gradlew executable
               run: chmod +x ./gradlew
 
