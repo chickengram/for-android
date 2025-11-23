@@ -25,6 +25,9 @@ jobs:
             - name: Install NDK 21.4.7075529
               run: sdkmanager "ndk;21.4.7075529"
 
+            - name: Make gradlew executable
+              run: chmod +x ./gradlew
+
             - name: Gradle Build
               run: ./gradlew assembleRelease
 
@@ -34,7 +37,7 @@ jobs:
                   APK_PATH=$(find . -name "*release*.apk" | head -n 1)
                   echo "APK_PATH=$APK_PATH" >> $GITHUB_OUTPUT
 
-            - name: Create GitHub Release
+            - name: Create Release
               uses: softprops/action-gh-release@v2
               with:
                   files: ${{ steps.apk.outputs.APK_PATH }}
