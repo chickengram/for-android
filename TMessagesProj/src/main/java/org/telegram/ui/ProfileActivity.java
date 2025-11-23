@@ -10413,6 +10413,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         numberSectionRow = -1;
         numberRow = -1;
         birthdayRow = -1;
+        telegramIdRow = -1;
         setUsernameRow = -1;
         bioRow = -1;
         channelRow = -1;
@@ -10661,6 +10662,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (user != null && username != null) {
                     usernameRow = rowCount++;
                 }
+                telegramIdRow = rowCount++;
                 if (userInfo != null) {
                     if (userInfo.birthday != null) {
                         birthdayRow = rowCount++;
@@ -12974,6 +12976,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 VIEW_TYPE_HEADER_EMPTY = 28,
                 VIEW_TYPE_MUSIC = 29,
                 VIEW_TYPE_TEXT_DETAIL_MULTILINE_2 = 30;
+                VIEW_TYPE_TELEGRAM_ID = 31;
 
         private Context mContext;
 
@@ -13484,6 +13487,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     detailCell.setTag(position);
                     detailCell.textView.setLoading(loadingSpan);
                     detailCell.valueTextView.setLoading(loadingSpan);
+                    break;
+                case VIEW_TYPE_TEXT_DETAIL_ID:
+                    TextDetailCell idCell = (TextDetailCell) holder.itemView;
+                    TLRPC.User user = getMessagesController().getUser(userId);
+                    if (user != null) {
+                        idCell.setTextAndValue(
+                            String.valueOf(user.id),
+                            "Telegram ID",
+                            false
+                        );
+                    }
                     break;
                 case VIEW_TYPE_ABOUT_LINK:
                     AboutLinkCell aboutLinkCell = (AboutLinkCell) holder.itemView;
@@ -14113,6 +14127,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return VIEW_TYPE_HEADER;
             } else if (position == phoneRow || position == locationRow || position == numberRow || position == birthdayRow) {
                 return VIEW_TYPE_TEXT_DETAIL;
+            } else if (position == telegramIdRow) {
+                return VIEW_TYPE_TELEGRAM_ID;
             } else if (position == usernameRow || position == setUsernameRow) {
                 return VIEW_TYPE_TEXT_DETAIL_MULTILINE;
             } else if (position == noteRow) {
