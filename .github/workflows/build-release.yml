@@ -1,0 +1,42 @@
+name: Build Release APK
+
+on:
+    push:
+        tags:
+            - 'v*'
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Set up JDK
+              uses: actions/setup-java@v4
+              with:
+                  distribution: temurin
+                  java-version: 17
+
+            - name: Install Android SDK
+              uses: android-actions/setup-android@v3
+
+            - name: Install NDK 21.4.7075529
+              run: sdkmanager "ndk;21.4.7075529"
+
+            - name: Gradle Build
+              run: ./gradlew assembleRelease
+
+            - name: Find APK
+              id: apk
+              run: |
+                  APK_PATH=$(find . -name "*release*.apk" | head -n 1)
+                  echo "APK_PATH=$APK_PATH" >> $GITHUB_OUTPUT
+
+            - name: Create GitHub Release
+              uses: softprops/action-gh-release@v2
+              with:
+                  files: ${{ steps.apk.outputs.APK_PATH }}
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
