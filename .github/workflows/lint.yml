@@ -1,0 +1,27 @@
+name: Lint
+
+on:
+    pull_request:
+    push:
+        branches:
+            - main
+
+jobs:
+    lint:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Make gradlew executable
+              run: chmod +x ./gradlew
+
+            - name: Run Lint
+              run: ./gradlew lint
+
+            - name: Upload Lint Report
+              uses: actions/upload-artifact@v3
+              with:
+                  name: lint-report
+                  path: app/build/reports/lint-results.html
