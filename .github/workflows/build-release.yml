@@ -34,7 +34,9 @@ jobs:
               uses: android-actions/setup-android@v3
 
             - name: Create local.properties
-              run: echo "sdk.dir=$ANDROID_HOME" > local.properties
+              run: |
+                  mkdir -p TMessagesProj
+                  echo "sdk.dir=$ANDROID_HOME" > TMessagesProj/local.properties
 
             - name: Install NDK 21.4.7075529
               run: sdkmanager "ndk;21.4.7075529"
